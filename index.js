@@ -1,16 +1,14 @@
-const request = require('request-promise')
+const request = require('request')
+const rp = require('request-promise')
 const prettyjson = require('prettyjson')
+const chalk = require('chalk');
 
 // urls for sub reddits
 const redditP = "https://www.reddit.com/r/politics.json"
 const redditSc = "https://www.reddit.com/r/SquardedCircle.json"
 
 // colors are for prettyjson
-const colors = {
-  keysColor: 'green',
-  dashColor: 'magenta',
-  stringColor: 'yellow',
-}
+const colors = { noColor: true }
 
 // options are the first arrg for the request function
 const options = {
@@ -21,14 +19,15 @@ const options = {
   json: true
 };
 
-function callback(error, response, body) {
-  if (!error && response.statusCode == 200) {
-    const redditPosts = body.data.children
+rp(options)
+  .then(function (parsedBody) {
+    const redditPosts = parsedBody.data.children
     let titles = redditPosts
-      .map((n) => `${n.data.title} https://www.reddit.com/${n.data.permalink}` )
+      .map((n) => `${n.data.title}https://www.reddit.com/${n.data.permalink}`)
       // .filter((n) => n.includes('Observer'))
-    console.log(prettyjson.render(titles, colors))
-  }
-}
 
-request(options, callback);
+    console.log(chalk.yellow(prettyjson.render(titles, colors)))
+  })
+  .catch(function (err) {
+    console.log(chalk.red('nope'))
+  });

@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^1.1.3",
     "prettyjson": "^1.1.3",
+    "request": "^2.74.0",
     "request-promise": "^4.1.1"
   }
 }
